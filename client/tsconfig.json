@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    //Compile
+    "target": "ES6",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist/",
+    "resolveJsonModule": true,
+    //Strict
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    //Linter
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true
+  },
+  "include": ["./src"],
+  "exclude": ["./node_modules", "./src/data", "./src/scss"]
+}
