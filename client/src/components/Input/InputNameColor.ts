@@ -11,7 +11,7 @@ export class inputCarColor extends BaseComponent {
     this.inputTxt.element.setAttribute('type', 'txt');
     this.inputColor = new BaseComponent(this.element, 'input', [`${styles[0]}__inputColor`]);
     this.inputColor.element.setAttribute('type', 'color');
-    this.btn = new BaseComponent(this.element, 'button', [`${styles[0]}__btnCreate`, 'btn1']);
+    this.btn = new BaseComponent(this.element, 'button', [`${styles[0]}__btnCreate`, 'btn']);
     this.btn.element.textContent = content;
   }
 }

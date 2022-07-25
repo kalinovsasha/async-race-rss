@@ -1,4 +1,5 @@
 import { BaseComponent } from '../../abstract/BaseComponent';
+import './header.scss';
 
 export class Header extends BaseComponent {
   btnGarage: BaseComponent;
