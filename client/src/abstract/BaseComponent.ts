@@ -10,4 +10,10 @@ export class BaseComponent {
     this.root = root;
     this.root.append(this.element);
   }
+  remove() {
+    this.element.remove();
+  }
+  add() {
+    this.root.append(this.element);
+  }
 }
