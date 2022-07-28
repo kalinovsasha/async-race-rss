@@ -2,7 +2,7 @@ import '../src/styles/styles.scss';
 import { Header } from './components/Header/header';
 import { GaragePage } from './components/GaragePage/GaragePage';
 import { ICar } from './interfaces/interfaces';
-import { EActions, GarageController } from './Service/garageController';
+import { GarageController } from './Service/garageController';
 import { car } from './api/api';
 
 const baseUrl = 'http://127.0.0.1:3000';

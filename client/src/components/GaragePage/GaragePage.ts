@@ -4,6 +4,7 @@ import { Garage } from '../Garage/Garage';
 import './GaragePage.scss';
 import { ICar } from '../../interfaces/interfaces';
 import { EEVents, GarageController } from './../../Service/garageController';
+import { Pagination } from '../Pagination/Pagination';
 
 export class GaragePage extends BaseComponent {
   carCountEl;
@@ -14,6 +15,7 @@ export class GaragePage extends BaseComponent {
   controller: GarageController;
   constructor(root: HTMLElement, controller: GarageController, cars?: ICar[] | null) {
     super(root, 'div', ['garageContainer']);
+    this.controller = controller;
     this.carsCounter = '0';
     this.currentPage = 1;
     this.garaControls = new GarageControls(this.element, controller, { color: '#000000', text: '' });
@@ -22,19 +24,19 @@ export class GaragePage extends BaseComponent {
     this.pageNumber = new BaseComponent(this.element, 'h3', ['garage__page']);
     this.pageNumber.element.textContent = `page #${this.currentPage}`;
     const garage = new Garage(this.element, controller.dispatch.bind(controller), cars);
-    this.controller = controller;
+    const pagination = new Pagination(this.element, controller);
+
     controller.subscribe(EEVents.renderCars, garage.rendrCars.bind(garage));
     controller.subscribe(EEVents.carsCount, this.setcarsCounter.bind(this));
+    controller.subscribe(EEVents.changePage, this.setPage.bind(this));
   }
 
   setcarsCounter(count: string) {
     this.carsCounter = count;
     this.carCountEl.element.textContent = `Garage (${this.carsCounter})`;
   }
-  setPage(count: number) {
-    this.currentPage = count;
+  setPage(thisPage: number) {
+    this.currentPage = thisPage;
     this.pageNumber.element.textContent = `page #${this.currentPage}`;
   }
 }
-
-// Вынести Колличество машин и страниц из гаража на эту страницу и добавить пагинацию.

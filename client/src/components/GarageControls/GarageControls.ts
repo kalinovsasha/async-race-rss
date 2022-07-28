@@ -28,7 +28,6 @@ export class GarageControls extends BaseComponent {
         text: updateData.text,
       }
     );
-    controller.subscribe(EEVents.selectCar, inputUpdate.changeState.bind(inputUpdate));
     const raceControls = new BaseComponent(this.element, 'div', ['race-control']);
     const race = new BaseComponent(raceControls.element, 'button', ['btn']);
     race.element.textContent = 'Race';
@@ -36,5 +35,8 @@ export class GarageControls extends BaseComponent {
     reset.element.textContent = 'Reset';
     const generate = new BaseComponent(raceControls.element, 'button', ['btnLong']);
     generate.element.textContent = 'Generate cars';
+
+    controller.subscribe(EEVents.selectCar, inputUpdate.changeState.bind(inputUpdate));
+    generate.element.onclick = () => controller.dispatch({ type: EActions.generateCars });
   }
 }

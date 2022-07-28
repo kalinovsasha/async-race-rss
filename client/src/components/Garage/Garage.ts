@@ -1,6 +1,6 @@
 import { BaseComponent } from '../../abstract/BaseComponent';
 import { ICar } from '../../interfaces/interfaces';
-import { GarageController, IDispatchData } from '../../Service/garageController';
+import { IDispatchData } from '../../Service/garageController';
 import { Car } from '../Car/Car';
 import './Garage.scss';
 
