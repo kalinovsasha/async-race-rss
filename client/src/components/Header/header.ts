@@ -1,5 +1,6 @@
 import { BaseComponent } from '../../abstract/BaseComponent';
 import './header.scss';
+import svg from '../../assets/img/audio.svg';
 
 export class Header extends BaseComponent {
   btnGarage: BaseComponent;

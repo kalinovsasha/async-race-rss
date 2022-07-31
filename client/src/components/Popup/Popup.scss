@@ -1,0 +1,23 @@
+.popup {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  top: calc(50vh - 25px);
+  left: calc(50vw - 160px);
+  width: 320px;
+  height: 50px;
+}
+
+.popup__winner {
+  color: red;
+  font-style: italic;
+  text-align: center;
+  font-size: 32px;
+  text-shadow: 1px 4px 8px rgb(243, 200, 10);
+}
+
+.popup__winner_hidden {
+  display: none;
+}

@@ -48,6 +48,10 @@ const baseConfig = {
           filename: 'assets/fonts/[name][ext]',
         },
       },
+      {
+        test: /\.mp3$/,
+        loader: 'file-loader',
+      },
     ],
   },
   resolve: {

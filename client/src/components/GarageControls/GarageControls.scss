@@ -1,4 +1,3 @@
-
 .garage__controls {
       margin-left: 20px;
       margin-top: 20px;
@@ -39,4 +38,11 @@
 
   .btnLong {
       width: 40%;
+  }
+
+  .garage_disable {
+    pointer-events: none;
+    background-color: gray;
+    border: none;
+    outline: none;
   }
