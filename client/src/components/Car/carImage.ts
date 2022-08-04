@@ -1,6 +1,7 @@
-export function carImage(color: string): string {
+export function carImage(color: string, className: string): string {
+  // "car-image-svg"
   return `
-    <svg class="car-image-svg" version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 569" ">
+    <svg class="${className}" version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 569" ">
       <title>1918554-svg</title>
       <style>
         tspan { white-space:pre }
@@ -38,7 +39,3 @@ export function carImage(color: string): string {
       </g>
     </svg>`;
 }
-
-//const car = carImage('red');
-//const body = document.getElementById('root')!;
-//body.innerHTML = `${car}`;

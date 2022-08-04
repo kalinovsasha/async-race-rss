@@ -1,0 +1,40 @@
+.winnersTable__header_item {
+  background-color: #ffffff;
+  width: 90px;
+  padding: 0 0;
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.winnersTable {
+  margin-bottom: 20px;
+}
+
+.winnersTable__coll {
+  width: 90px;
+  padding: 0 0;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+}
+
+.winnersTable__header__id, .winnersTable__id {
+  width: 71px;
+}
+
+.winnersTable__model, .winnersTable__header__model {
+  width: 160px;
+}
+
+.car-image-svg-winner{
+  width: 50px;
+}
+
+.arrowUp::after {
+content: ' ↑';
+}
+
+.arrowDown::after {
+  content: ' ↓';
+  }

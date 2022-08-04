@@ -5,7 +5,10 @@
   justify-content: space-between;
   width: 97%;
   height: 100px;
-  border-bottom: 2px dashed white;
+  background-image: linear-gradient(to right, rgb(255, 255, 255) 40%, rgba(0, 0, 0, 0) 0%);
+  background-position: bottom;
+  background-size: 37px 2px;
+  background-repeat: repeat-x;
 }
 
 .carControls {
@@ -43,19 +46,25 @@
 }
 
 .car {
+  position: relative;
   display: flex;
   flex-direction: row;
+  width: 110px;
 }
 
 .car-image-svg {
   width: 100px;
-  height: 50px;
   margin-top: 8px;
-  align-self: flex-end;
 }
 
 .finishFlag {
   position: absolute;
   right: 120px;
   width: 55px;
+}
+
+.engineControls_disabled {
+  pointer-events: none;
+  background-color: rgb(134, 130, 130);
+  border: 1px solid  rgb(80, 79, 79);
 }

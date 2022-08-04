@@ -1,0 +1,155 @@
+import { car, createCar, deleteCar, getCar, getCars, updateCar } from '../api/api';
+import { baseUrl } from '../api/api';
+import { generateRandomCars } from '../utils/utils';
+
+type subscribeRenderCars = (data: car[]) => void;
+type subscribeCarsCount = (data: string) => void;
+type subscribeCarUpdate = (data: { color: string; text: string }) => void;
+export type subscribePagination = (curPage: number, pageCount: number) => void;
+export const countCarsOnPage = 7;
+
+export enum EActions {
+  createCar = 'CREATE_CAR',
+  removeCar = 'REMOVE_CAR',
+  selectCar = 'SELECT_CAR',
+  UpdatetCar = 'UPDATE_CAR',
+  generateCars = 'GENERATE_CARS',
+  startEngine = 'SART_ENGINE',
+  stopEngine = 'STOP_ENGINE',
+  startRace = 'START_RACE',
+  resetRace = 'RESET_RACE',
+  prevPage = 'PREV_PAGE',
+  nextPage = 'NEXT_PAGE',
+}
+
+export enum EEVents {
+  renderCars = 'renderCars',
+  carsCount = 'carsCount',
+  selectCar = 'selectCar',
+  changePage = 'changePage',
+}
+
+export interface ICar {
+  name: string;
+  color: string;
+  id: number;
+}
+
+export interface IDispatchData {
+  type: EActions;
+  data?: number | car;
+}
+
+export type funcDispatch = (data: IDispatchData) => void;
+
+export class GarageController {
+  renderSubs: Array<(data: car[]) => void>;
+  carCountSubs: Array<(data: string) => void>;
+  selectCarSubs: Array<(data: { color: string; text: string }) => void>;
+  paginationSubs: Array<(curPage: number, pageCount: number) => void>;
+  carsOnPage: car[];
+  selectedCar: number | undefined;
+  pageCount: number;
+  curPage: number;
+  constructor() {
+    this.carsOnPage = [];
+    this.renderSubs = [];
+    this.carCountSubs = [];
+    this.selectCarSubs = [];
+    this.paginationSubs = [];
+    this.curPage = 1;
+    this.pageCount = 1;
+    this.getCars();
+  }
+
+  subscribe(
+    event: EEVents,
+    callback: subscribeRenderCars | subscribeCarsCount | subscribeCarUpdate | subscribePagination
+  ) {
+    switch (event) {
+      case EEVents.renderCars:
+        this.renderSubs.push(callback as subscribeRenderCars);
+        break;
+      case EEVents.carsCount:
+        this.carCountSubs.push(callback as subscribeCarsCount);
+        break;
+      case EEVents.selectCar:
+        this.selectCarSubs.push(callback as subscribeCarUpdate);
+        break;
+      case EEVents.changePage:
+        this.paginationSubs.push(callback as subscribePagination);
+        break;
+    }
+  }
+
+  async dispatch(action: IDispatchData) {
+    switch (action.type) {
+      case EActions.createCar:
+        this.addCar(action.data! as car);
+        break;
+      case EActions.generateCars:
+        await this.generateCars();
+        this.getCars();
+        break;
+      case EActions.removeCar:
+        this.removeCar(action.data as number);
+        break;
+      case EActions.selectCar:
+        this.selectedCar = action.data as number;
+        this.selectCar(this.selectedCar);
+        break;
+      case EActions.UpdatetCar:
+        if (this.selectedCar) {
+          const data = action.data as car;
+          this.updateCar({
+            id: this.selectedCar,
+            name: data.name,
+            color: data.color,
+          });
+        }
+        break;
+      case EActions.prevPage:
+        if (this.curPage > 1) this.curPage -= 1;
+        this.getCars();
+        break;
+      case EActions.nextPage:
+        if (this.curPage < Math.ceil(this.pageCount)) this.curPage += 1;
+        this.getCars();
+        break;
+    }
+  }
+
+  private async getCars() {
+    const res = await getCars(countCarsOnPage, this.curPage, baseUrl);
+    if (res !== null) {
+      this.carsOnPage = res[0];
+      this.renderSubs.forEach((i) => i(res[0]));
+      this.carCountSubs.forEach((i) => i(res[1]));
+      this.pageCount = Math.ceil(Number(res[1]) / countCarsOnPage);
+      this.paginationSubs.forEach((el) => el(this.curPage, this.pageCount));
+    }
+  }
+
+  async addCar(data: car) {
+    await createCar(data).then(() => this.getCars());
+  }
+
+  async removeCar(id: number) {
+    await deleteCar(id).then(() => this.getCars());
+  }
+
+  async updateCar(car: car) {
+    await updateCar(car);
+    this.getCars();
+  }
+
+  async generateCars() {
+    generateRandomCars(100).forEach((car) => this.addCar(car));
+  }
+
+  async selectCar(id: number) {
+    const car = await getCar(id, baseUrl);
+    this.selectedCar = id;
+    if (car) this.selectCarSubs.forEach((i) => i({ color: car.color, text: car.name }));
+  }
+}

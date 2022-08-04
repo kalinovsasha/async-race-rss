@@ -1,15 +1,17 @@
 import { BaseComponent } from '../../abstract/BaseComponent';
-import { GarageController, EActions, EEVents } from '../../Service/garageController';
+import { EEVents, Service } from '../../Service/Service';
 import { inputCarColor } from './../Input/InputNameColor';
 import './GarageControls.scss';
 
 export class GarageControls extends BaseComponent {
-  constructor(root: HTMLElement, controller: GarageController, updateData: { color: string; text: string }) {
+  private race;
+  private reset;
+  private generate;
+  constructor(root: HTMLElement, service: Service, updateData: { color: string; text: string }) {
     super(root, 'div', ['garage__controls']);
     const inputCreate = new inputCarColor(
       this.element,
-      controller,
-      EActions.createCar,
+      service.addCar.bind(service),
       [`create-car`, 'inputContainer'],
       {
         btnTxt: 'Create',
@@ -19,8 +21,7 @@ export class GarageControls extends BaseComponent {
     );
     const inputUpdate = new inputCarColor(
       this.element,
-      controller,
-      EActions.UpdatetCar,
+      service.updateCar.bind(service),
       [`update-car`, 'inputContainer'],
       {
         btnTxt: 'Update',
@@ -29,14 +30,29 @@ export class GarageControls extends BaseComponent {
       }
     );
     const raceControls = new BaseComponent(this.element, 'div', ['race-control']);
-    const race = new BaseComponent(raceControls.element, 'button', ['btn']);
-    race.element.textContent = 'Race';
-    const reset = new BaseComponent(raceControls.element, 'button', ['btn']);
-    reset.element.textContent = 'Reset';
-    const generate = new BaseComponent(raceControls.element, 'button', ['btnLong']);
-    generate.element.textContent = 'Generate cars';
+    this.race = new BaseComponent(raceControls.element, 'button', ['btn']);
+    this.race.element.textContent = 'Race';
+    this.reset = new BaseComponent(raceControls.element, 'button', ['btn']);
+    this.reset.element.textContent = 'Reset';
+    this.generate = new BaseComponent(raceControls.element, 'button', ['btnLong']);
+    this.generate.element.textContent = 'Generate cars';
 
-    controller.subscribe(EEVents.selectCar, inputUpdate.changeState.bind(inputUpdate));
-    generate.element.onclick = () => controller.dispatch({ type: EActions.generateCars });
+    service.subscribe(EEVents.selectCar, inputUpdate.changeState.bind(inputUpdate));
+    this.generate.element.onclick = () => service.generateCars();
+    this.race.element.onclick = () => {
+      this.race.element.classList.add('garage_disable');
+      this.reset.element.classList.add('garage_disable');
+      this.generate.element.classList.add('garage_disable');
+      service.startRace();
+    };
+    this.reset.element.onclick = () => {
+      this.race.element.classList.remove('garage_disable');
+      service.resetRace();
+    };
+  }
+
+  resetStyles() {
+    this.reset.element.classList.remove('garage_disable');
+    this.generate.element.classList.remove('garage_disable');
   }
 }
