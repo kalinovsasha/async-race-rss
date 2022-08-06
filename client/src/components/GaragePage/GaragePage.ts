@@ -31,6 +31,7 @@ export class GaragePage extends BaseComponent {
     service.subscribe(EEVents.renderCars, garage.rendrCars.bind(garage));
     service.subscribe(EEVents.winRace, popupWinner.showWinner.bind(popupWinner));
     service.subscribe(EEVents.winRace, this.garaControls.resetStyles.bind(this.garaControls));
+    service.subscribe(EEVents.pagination, pagination.disableButton.bind(pagination));
   }
 
   setcarsCounter(carsCount: string): void {
@@ -40,5 +41,13 @@ export class GaragePage extends BaseComponent {
   setPage(data: { curPage: number; pageCount: number }) {
     this.currentPage = data.curPage;
     this.pageNumber.element.textContent = `page #${this.currentPage}`;
+  }
+
+  renderPage(url: string) {
+    if (url === '/garage' || url === '') {
+      this.element.classList.remove('garage__page_hidden');
+    } else {
+      this.element.classList.add('garage__page_hidden');
+    }
   }
 }

@@ -6,6 +6,7 @@ import './GarageControls.scss';
 export class GarageControls extends BaseComponent {
   private race;
   private reset;
+  private generate;
   constructor(root: HTMLElement, service: Service, updateData: { color: string; text: string }) {
     super(root, 'div', ['garage__controls']);
     const inputCreate = new inputCarColor(
@@ -33,14 +34,15 @@ export class GarageControls extends BaseComponent {
     this.race.element.textContent = 'Race';
     this.reset = new BaseComponent(raceControls.element, 'button', ['btn']);
     this.reset.element.textContent = 'Reset';
-    const generate = new BaseComponent(raceControls.element, 'button', ['btnLong']);
-    generate.element.textContent = 'Generate cars';
+    this.generate = new BaseComponent(raceControls.element, 'button', ['btnLong']);
+    this.generate.element.textContent = 'Generate cars';
 
     service.subscribe(EEVents.selectCar, inputUpdate.changeState.bind(inputUpdate));
-    generate.element.onclick = () => service.generateCars();
+    this.generate.element.onclick = () => service.generateCars();
     this.race.element.onclick = () => {
       this.race.element.classList.add('garage_disable');
       this.reset.element.classList.add('garage_disable');
+      this.generate.element.classList.add('garage_disable');
       service.startRace();
     };
     this.reset.element.onclick = () => {
@@ -51,5 +53,6 @@ export class GarageControls extends BaseComponent {
 
   resetStyles() {
     this.reset.element.classList.remove('garage_disable');
+    this.generate.element.classList.remove('garage_disable');
   }
 }

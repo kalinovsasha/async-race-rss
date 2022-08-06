@@ -37,7 +37,7 @@ export class Car extends BaseComponent {
     this.engineStopBtn.element.textContent = 'B';
     this.trackContainer = new BaseComponent(this.element, 'div', ['track']);
     this.car = new BaseComponent(this.trackContainer.element, 'div', ['car']);
-    this.car.element.innerHTML = carImage(carColor);
+    this.car.element.innerHTML = carImage(carColor, 'car-image-svg');
     const finishFlag = new BaseComponent(this.trackContainer.element, 'img', ['finishFlag']);
     finishFlag.element.setAttribute('src', svg);
 
@@ -49,7 +49,7 @@ export class Car extends BaseComponent {
       this.startEngine(data.result);
     };
     this.engineStopBtn.element.onclick = async () => {
-      this.stopEngine();
+      await service.stopCarEngine(carId);
       this.reset();
     };
     service.subscribe(EEVents.raceStart, this.raceHandler.bind(this));

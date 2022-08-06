@@ -119,15 +119,10 @@ export const switchToDrive = async (carId: number): Promise<number> => {
   }
 };
 
-export const stopEngine = async (carId: number): Promise<{ status: number; result: carStatus }> => {
+export const stopEngine = async (carId: number): Promise<number> => {
   try {
-    const data = await fetch(`${baseUrl}/engine?id=${carId}&status=stopped`);
-    const res: carStatus = await data.json();
-
-    return {
-      status: data.status,
-      result: res,
-    };
+    const data = await fetch(`${baseUrl}/engine?id=${carId}&status=stopped`, { method: 'PATCH' });
+    return data.status;
   } catch (err) {
     throw new Error(`${err}`);
   }
@@ -138,14 +133,14 @@ export const getAllWinners = async (
   sort = 'time',
   order = 'ASC',
   limit = 10
-): Promise<{ result: winner[]; totalCount: string } | null> => {
+): Promise<{ result: winner[]; totalCount: number } | null> => {
   try {
     const data = await fetch(`${baseUrl}/winners?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
     const res: winner[] = await data.json();
 
     return {
       result: res,
-      totalCount: data.headers.get('X-Total-Count') || '0',
+      totalCount: Number(data.headers.get('X-Total-Count')) || 0,
     };
   } catch (err) {
     throw new Error(`${err}`);

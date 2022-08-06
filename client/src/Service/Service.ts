@@ -2,12 +2,17 @@ import {
   car,
   carStatus,
   createCar,
+  createWinner,
   deleteCar,
+  deleteWinner,
   getCar,
   getCars,
+  getWinner,
   startEngine,
+  stopEngine,
   switchToDrive,
   updateCar,
+  updateWinner,
 } from '../api/api';
 import { generateRandomCars } from '../utils/utils';
 import rondon from '../assets/audio/rondondon.mp3';
@@ -62,6 +67,7 @@ export class Service {
   private baseUrl;
 
   constructor(countCarsOnPage: number, baseUrl: string) {
+    this.sound.volume = 0.35;
     this.carsOnCurPage = [];
     this.countCarsOnPage = countCarsOnPage;
     this.baseUrl = baseUrl;
@@ -148,6 +154,7 @@ export class Service {
     if (this.curPage > 1 && this.carsOnCurPage?.length === 0) {
       this.prevPage();
     }
+    await deleteWinner(id);
   }
 
   async updateCar(car: car) {
@@ -189,6 +196,11 @@ export class Service {
     return speed;
   }
 
+  async stopCarEngine(carId: number) {
+    const speed = await stopEngine(carId);
+    return speed;
+  }
+
   async switchToDrive(carId: number) {
     return await switchToDrive(carId);
   }
@@ -208,11 +220,32 @@ export class Service {
     this.dispatchEvent(EEVents.raceStart, false);
   }
 
-  winRace(id: number, time: number, name: string) {
+  async winRace(id: number, time: number, name: string) {
     if (this.winnerTime === 0) {
       this.winnerTime = time;
       this.dispatchEvent(EEVents.winRace, { time: time / 1000, name: name });
-      console.log(`car ${id} time ${time}`);
+      const curWinner = await getWinner(id);
+      if (curWinner.status === 404) {
+        await createWinner({
+          id: id,
+          wins: 1,
+          time: Number((time / 1000).toFixed(2)),
+        });
+      } else {
+        if (curWinner.result.time > Number((time / 1000).toFixed(2))) {
+          updateWinner({
+            id: id,
+            wins: curWinner.result.wins + 1,
+            time: Number((time / 1000).toFixed(2)),
+          });
+        } else {
+          updateWinner({
+            id: id,
+            wins: curWinner.result.wins + 1,
+            time: curWinner.result.time,
+          });
+        }
+      }
     }
   }
 }

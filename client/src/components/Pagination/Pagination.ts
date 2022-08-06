@@ -1,11 +1,12 @@
 import { BaseComponent } from '../../abstract/BaseComponent';
 import './Pagination.scss';
-import { EEVents, Service } from '../../Service/Service';
+import { Service } from '../../Service/Service';
+import { ServiceWinners } from '../../Service/ServiceWinners';
 
 export class Pagination extends BaseComponent {
-  prevBtn;
-  nextBtn;
-  constructor(root: HTMLElement, service: Service) {
+  private prevBtn;
+  private nextBtn;
+  constructor(root: HTMLElement, service: Service | ServiceWinners) {
     super(root, 'div', ['paginationContainer']);
     this.prevBtn = new BaseComponent(this.element, 'button', ['pagination__btn']);
     this.nextBtn = new BaseComponent(this.element, 'button', ['pagination__btn']);
@@ -13,7 +14,6 @@ export class Pagination extends BaseComponent {
     this.nextBtn.element.textContent = 'Next';
     this.prevBtn.element.onclick = () => service.prevPage();
     this.nextBtn.element.onclick = () => service.nextPage();
-    service.subscribe(EEVents.pagination, this.disableButton.bind(this));
   }
 
   disableButton(data: { curPage: number; pageCount: number }) {
